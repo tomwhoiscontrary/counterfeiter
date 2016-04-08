@@ -1,3 +1,5 @@
 package fixtures
 
-type RequestFactory func(string, map[string]interface{}) (string, error)
+import "github.com/maxbrunsfeld/counterfeiter/model"
+
+type RequestFactory func(model.InterfaceToFake, map[string]interface{}) (model.InterfaceToFake, error)

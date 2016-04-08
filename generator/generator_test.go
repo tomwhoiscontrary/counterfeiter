@@ -140,25 +140,26 @@ import (
 	"sync"
 
 	"github.com/maxbrunsfeld/counterfeiter/fixtures"
+	"github.com/maxbrunsfeld/counterfeiter/model"
 )
 
 type FakeRequestFactory struct {
-	Stub        func(string, map[string]interface{}) (string, error)
+	Stub        func(model.InterfaceToFake, map[string]interface{}) (model.InterfaceToFake, error)
 	mutex       sync.RWMutex
 	argsForCall []struct {
-		arg1 string
+		arg1 model.InterfaceToFake
 		arg2 map[string]interface{}
 	}
 	returns struct {
-		result1 string
+		result1 model.InterfaceToFake
 		result2 error
 	}
 }
 
-func (fake *FakeRequestFactory) Spy(arg1 string, arg2 map[string]interface{}) (string, error) {
+func (fake *FakeRequestFactory) Spy(arg1 model.InterfaceToFake, arg2 map[string]interface{}) (model.InterfaceToFake, error) {
 	fake.mutex.Lock()
 	fake.argsForCall = append(fake.argsForCall, struct {
-		arg1 string
+		arg1 model.InterfaceToFake
 		arg2 map[string]interface{}
 	}{arg1, arg2})
 	fake.mutex.Unlock()
@@ -175,16 +176,16 @@ func (fake *FakeRequestFactory) CallCount() int {
 	return len(fake.argsForCall)
 }
 
-func (fake *FakeRequestFactory) ArgsForCall(i int) (string, map[string]interface{}) {
+func (fake *FakeRequestFactory) ArgsForCall(i int) (model.InterfaceToFake, map[string]interface{}) {
 	fake.mutex.RLock()
 	defer fake.mutex.RUnlock()
 	return fake.argsForCall[i].arg1, fake.argsForCall[i].arg2
 }
 
-func (fake *FakeRequestFactory) Returns(result1 string, result2 error) {
+func (fake *FakeRequestFactory) Returns(result1 model.InterfaceToFake, result2 error) {
 	fake.Stub = nil
 	fake.returns = struct {
-		result1 string
+		result1 model.InterfaceToFake
 		result2 error
 	}{result1, result2}
 }
